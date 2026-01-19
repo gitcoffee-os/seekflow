@@ -1,0 +1,21 @@
+{
+  "intelligentSearch": "Intelligent Search Assistant",
+  "searchDescription": "Support simultaneous search on multiple platforms to improve search efficiency",
+  "searchPlaceholder": "Please enter search keywords...",
+  "searchButton": "One-click Search",
+  "selectPlatforms": "Select Search Platforms",
+  "selectedCount": "Selected {count}",
+  "selectedCountPrefix": "Selected",
+  "selectedCountSuffix": "",
+  "tabs": "Tabs",
+  "category": "Category",
+  "grid": "Grid",
+  "list": "List",
+  "selectAll": "Select All",
+  "selectByTag": "Select by Tag",
+  "copyright": "© 2026 SeekFlow. All rights reserved.",
+  "lightMode": "Light",
+  "darkMode": "Dark",
+  "switchToChatBot": "Switch to AI Mode",
+  "switchToSearchBox": "Switch to Search Box"
+}

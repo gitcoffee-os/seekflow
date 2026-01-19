@@ -1,0 +1,6 @@
+{
+  "pleaseSelectAtLeastOnePlatform": "Please select at least one platform",
+  "searching": "Searching for '{query}' on {count} platform(s)...",
+  "openedInNewTab": "Opened search results in {count} new tab(s)",
+  "searchFailed": "Search failed"
+}

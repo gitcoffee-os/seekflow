@@ -1,0 +1,6 @@
+{
+  "pleaseSelectAtLeastOnePlatform": "請至少選擇一個平台",
+  "searching": "正在 {count} 個平台上搜尋 '{query}'...",
+  "openedInNewTab": "已在 {count} 個新標籤頁中開啟搜尋結果",
+  "searchFailed": "搜尋失敗"
+}

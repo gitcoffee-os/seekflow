@@ -1,0 +1,20 @@
+{
+  "title": "AI 对话",
+  "subtitle": "与 SeekFlow 进行智能对话",
+  "back": "返回",
+  "conversations": "会话历史",
+  "welcomeTitle": "欢迎使用 SeekFlow",
+  "welcomePreview": "开始与 AI 助手的对话",
+  "newConversation": "已创建新会话",
+  "newConversationBtn": "新会话",
+  "quickActions": "快捷操作",
+  "summarize": "总结内容",
+  "summarizePrompt": "请总结以下内容的要点：",
+  "explain": "解释概念",
+  "explainPrompt": "请详细解释以下概念：",
+  "translate": "翻译文本",
+  "translatePrompt": "请将以下内容翻译为中文：",
+  "codeHelp": "代码帮助",
+  "codeHelpPrompt": "请帮助我解决以下代码问题：",
+  "actionApplied": "已应用 {action} 操作"
+}

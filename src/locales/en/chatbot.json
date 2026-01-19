@@ -1,0 +1,21 @@
+{
+  "welcomeMessage": "Hello! I'm {botName}, how can I help you?",
+  "placeholder": "Please enter your question...",
+  "deepThink": "❓ Deep Thinking",
+  "webSearch": "🌐 Web Search",
+  "voiceInput": "Voice input feature is under development",
+  "fileUpload": "File upload feature is under development",
+  "imageUpload": "Image upload feature is under development",
+  "pleaseEnterKeyword": "Please enter search keywords",
+  "searchFailed": "Search failed, please try again later",
+  "modelSelect": {
+    "title": "Select Model",
+    "provider": "Provider",
+    "model": "Model",
+    "version": "Version",
+    "selectVersion": "Select Version",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "selected": "Selected model: {model}"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "setting": "Settings",
+  "confirm": "Confirm",
+  "cancel": "Cancel",
+  "save": "Save",
+  "reset": "Reset",
+  "delete": "Delete",
+  "add": "Add",
+  "edit": "Edit",
+  "close": "Close",
+  "success": "Success",
+  "error": "Error",
+  "warning": "Warning",
+  "info": "Info",
+  "logout": {
+    "success": "Logout successful",
+    "error": "Logout failed"
+  },
+  "login": {
+    "prompt": "Login required",
+    "confirm": "Please login to continue. Continue to login page?"
+  },
+  "platform": {
+    "maxPlatformsWarning": "Guest users can select a maximum of 3 platforms",
+    "maxPlatformsWithDetails": "Guest users can select a maximum of 3 platforms. You have selected {total} platform(s), and can select {available} more."
+  }
+}

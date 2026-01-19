@@ -1,0 +1,20 @@
+{
+  "title": "AI Chat",
+  "subtitle": "Intelligent conversation with SeekFlow",
+  "back": "Back",
+  "conversations": "Conversations",
+  "welcomeTitle": "Welcome to SeekFlow",
+  "welcomePreview": "Start a conversation with AI assistant",
+  "newConversation": "New conversation created",
+  "newConversationBtn": "New Conversation",
+  "quickActions": "Quick Actions",
+  "summarize": "Summarize",
+  "summarizePrompt": "Please summarize the key points of the following content:",
+  "explain": "Explain Concept",
+  "explainPrompt": "Please explain the following concept in detail:",
+  "translate": "Translate",
+  "translatePrompt": "Please translate the following content into English:",
+  "codeHelp": "Code Help",
+  "codeHelpPrompt": "Please help me solve the following code problem:",
+  "actionApplied": "{action} applied"
+}

@@ -1,0 +1,21 @@
+{
+  "totalResults": "About {count} results found",
+  "loading": "Loading search results...",
+  "error": "Search error",
+  "retry": "Retry",
+  "noResults": "No results found",
+  "noQuery": "Please enter search keywords",
+  "relatedSearches": "Related Searches",
+  "relatedContentTitle": "Related Content",
+  "tabs": {
+    "ai": "AI Mode",
+    "all": "All",
+    "images": "Images",
+    "news": "News",
+    "videos": "Videos",
+    "maps": "Maps",
+    "more": "More"
+  },
+  "requestError": "Request failed, please try again later",
+  "searchError": "Search failed"
+}

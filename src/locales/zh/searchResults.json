@@ -1,0 +1,21 @@
+{
+  "totalResults": "找到约 {count} 条结果",
+  "loading": "正在加载搜索结果...",
+  "error": "搜索出错了",
+  "retry": "重试",
+  "noResults": "未找到相关结果",
+  "noQuery": "请输入搜索关键词",
+  "relatedSearches": "相关搜索",
+  "relatedContentTitle": "相关搜索",
+  "tabs": {
+    "ai": "AI 模式",
+    "all": "全部",
+    "images": "图片",
+    "news": "新闻",
+    "videos": "视频",
+    "maps": "地图",
+    "more": "更多"
+  },
+  "requestError": "请求失败，请稍后重试",
+  "searchError": "搜索失败"
+}

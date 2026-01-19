@@ -1,0 +1,14 @@
+{
+  "entry": {
+    "options": "src/options/index.html",
+    "background": "src/background/index.ts",
+    "content": "src/content/index.ts",
+    "sidepanel": "src/sidepanel/index.html"
+  },
+  "build": {
+    "outDir": "build",
+    "vite": {
+      "config": "vite.config.ts"
+    }
+  }
+}

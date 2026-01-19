@@ -1,0 +1,21 @@
+{
+  "welcomeMessage": "您好！我是 {botName}，有什么可以帮助您的吗？",
+  "placeholder": "请输入您的问题...",
+  "deepThink": "❓ 深度思考",
+  "webSearch": "🌐 联网搜索",
+  "voiceInput": "语音输入功能开发中",
+  "fileUpload": "文件上传功能开发中",
+  "imageUpload": "图片上传功能开发中",
+  "pleaseEnterKeyword": "请输入搜索关键词",
+  "searchFailed": "搜索失败，请稍后重试",
+  "modelSelect": {
+    "title": "选择模型",
+    "provider": "供应商",
+    "model": "模型",
+    "version": "版本",
+    "selectVersion": "选择版本",
+    "confirm": "确认",
+    "cancel": "取消",
+    "selected": "已选择模型：{model}"
+  }
+}

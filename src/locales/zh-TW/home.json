@@ -1,0 +1,21 @@
+{
+  "intelligentSearch": "智能搜尋助手",
+  "searchDescription": "支援同時在多個平台搜尋，提高搜尋效率",
+  "searchPlaceholder": "請輸入搜尋關鍵詞...",
+  "searchButton": "一鍵搜尋",
+  "selectPlatforms": "選擇搜尋平台",
+  "selectedCount": "已選擇 {count}",
+  "selectedCountPrefix": "已選擇",
+  "selectedCountSuffix": "",
+  "tabs": "選項卡",
+  "category": "分類",
+  "grid": "網格",
+  "list": "列表",
+  "selectAll": "全選",
+  "selectByTag": "按標籤選擇",
+  "copyright": "© 2026 SeekFlow. All rights reserved.",
+  "lightMode": "淺色",
+  "darkMode": "深色",
+  "switchToChatBot": "切換到AI模式",
+  "switchToSearchBox": "切換到搜尋框"
+}

@@ -1,0 +1,21 @@
+{
+  "welcomeMessage": "您好！我是 SeekFlow，有什麼可以幫助您的嗎？",
+  "placeholder": "請輸入您的問題...",
+  "deepThink": "❓ 深度思考",
+  "webSearch": "🌐 聯網搜尋",
+  "voiceInput": "語音輸入功能開發中",
+  "fileUpload": "檔案上傳功能開發中",
+  "imageUpload": "圖片上傳功能開發中",
+  "pleaseEnterKeyword": "請輸入搜尋關鍵詞",
+  "searchFailed": "搜尋失敗，請稍後重試",
+  "modelSelect": {
+    "title": "選擇模型",
+    "provider": "供應商",
+    "model": "模型",
+    "version": "版本",
+    "selectVersion": "選擇版本",
+    "confirm": "確認",
+    "cancel": "取消",
+    "selected": "已選擇模型：{model}"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "totalResults": "找到約 {count} 條結果",
+  "loading": "正在載入搜尋結果...",
+  "error": "搜尋出錯了",
+  "retry": "重試",
+  "noResults": "未找到相關結果",
+  "noQuery": "請輸入搜尋關鍵詞",
+  "relatedSearches": "相關搜尋",
+  "relatedContentTitle": "相關搜尋",
+  "tabs": {
+    "ai": "AI 模式",
+    "all": "全部",
+    "images": "圖片",
+    "news": "新聞",
+    "videos": "影片",
+    "maps": "地圖",
+    "more": "更多"
+  },
+  "requestError": "請求失敗，請稍後重試",
+  "searchError": "搜尋失敗"
+}

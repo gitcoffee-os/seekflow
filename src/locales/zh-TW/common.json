@@ -1,0 +1,27 @@
+{
+  "setting": "設定",
+  "confirm": "確認",
+  "cancel": "取消",
+  "save": "儲存",
+  "reset": "重置",
+  "delete": "刪除",
+  "add": "新增",
+  "edit": "編輯",
+  "close": "關閉",
+  "success": "成功",
+  "error": "錯誤",
+  "warning": "警告",
+  "info": "資訊",
+  "logout": {
+    "success": "登出成功",
+    "error": "登出失敗"
+  },
+  "login": {
+    "prompt": "需要登錄",
+    "confirm": "請先登錄後再進行操作，是否前往登錄頁面？"
+  },
+  "platform": {
+    "maxPlatformsWarning": "未登錄用戶最多只能選擇3個平台",
+    "maxPlatformsWithDetails": "未登錄用戶最多只能選擇3個平台，當前已有{total}個平台被選中，還可以選擇{available}個平台"
+  }
+}
