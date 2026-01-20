@@ -34,9 +34,6 @@ import {
   useLoginGuard 
 } from '@gitcoffee/app';
 
-// 初始化设置 store
-const settingsStore = useSettingsStore();
-
 // 使用通用主题管理模块
 const { themeConfig, setTheme, setupThemeListener } = useTheme();
 
@@ -47,7 +44,7 @@ const { antdLocale } = useAntdLocale();
 const { isInitialized } = useAppInitialization({
   smartSearchDefault: APP_SETTING.smartSearch,
   aiModeSearchDefault: APP_SETTING.aiModeSearch,
-  settingsStore,
+  settingsStore: useSettingsStore,
   onInitialized: () => {
     // 加载完成后重新设置主题，确保主题设置生效
     setTheme();
@@ -57,7 +54,7 @@ const { isInitialized } = useAppInitialization({
 // 使用通用登录检查模块
 useLoginGuard({
   isInitialized,
-  settingsStore
+  settingsStore: useSettingsStore
 });
 
 // 初始化配置

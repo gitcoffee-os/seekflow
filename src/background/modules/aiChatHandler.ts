@@ -29,6 +29,11 @@ declare const chrome: any;
 
 // 检查页面是否准备好填充内容的函数
 const isPageReadyForFilling = (): boolean => {
+  // 检查是否在浏览器上下文（有document）
+  if (typeof document === 'undefined') {
+    return false;
+  }
+  
   // 基本状态检查
   const isReadyState =
     document.readyState === 'complete' || document.readyState === 'interactive';

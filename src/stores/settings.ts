@@ -81,23 +81,24 @@ export const useSettingsStore = defineStore('settings', {
       try {
         // 从API获取用户信息
         const res = await search.user.userInfoApi({});
-        if (!res) throw new Error('API response is undefined');
-        const data = res.data;
-        this.userInfo = data;
-        this.isLoggedIn = !!data.nickname;
-        // 保存到本地存储
-        await setItem('user', JSON.stringify(data));
-        return data;
+        if (res && res.data) {
+          const data = res.data;
+          this.userInfo = data;
+          this.isLoggedIn = !!data.nickname;
+          // 保存到本地存储
+          await setItem('user', JSON.stringify(data));
+          return data;
+        }
       } catch (error) {
         console.error('Failed to load user info:', error);
-        // 尝试从本地存储加载
-        const savedUser = await getItem('user');
-        if (savedUser) {
-          this.userInfo = JSON.parse(savedUser);
-          this.isLoggedIn = !!this.userInfo.nickname;
-        }
-        return null;
       }
+      // 尝试从本地存储加载（API调用失败或返回undefined时）
+      const savedUser = await getItem('user');
+      if (savedUser) {
+        this.userInfo = JSON.parse(savedUser);
+        this.isLoggedIn = !!this.userInfo.nickname;
+      }
+      return null;
     },
     
     // 保存用户信息
@@ -109,7 +110,15 @@ export const useSettingsStore = defineStore('settings', {
     
     // 登录
     login() {
-      window.open('https://seekflow.exmay.com/exmay/seekflow/center/home', '_blank');
+      // Use chrome.tabs.create in extension context, fall back to window.open if available
+      if (typeof chrome !== 'undefined' && chrome.tabs) {
+        chrome.tabs.create({
+          url: 'https://seekflow.exmay.com/exmay/seekflow/center/home',
+          active: true
+        });
+      } else if (typeof window !== 'undefined' && window.open) {
+        window.open('https://seekflow.exmay.com/exmay/seekflow/center/home', '_blank');
+      }
     },
     
     // 登出

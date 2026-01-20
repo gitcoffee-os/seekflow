@@ -22,6 +22,7 @@ import { APP_INFO } from '../config/config';
 
 <script lang="ts">
 import { initPluginSystem } from '@gitcoffee/plugins';
+import { initStore } from '@gitcoffee/store';
 import {
   Avatar,
   Button,
@@ -62,6 +63,9 @@ const antdLocaleMap = {
 export default {
   // Plasmo will call this function to configure the app instance
   async prepare(app: App) {
+    // 初始化 Store
+    await initStore(app);
+
     // 注册 Ant Design Vue 组件
     app.use(Button);
     app.use(Input);

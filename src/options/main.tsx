@@ -28,13 +28,11 @@ import {
   setI18n,
   updateLocaleFromStorage,
 } from '@gitcoffee/i18n';
+import { initStore } from '@gitcoffee/store';
 import Setting from '../views/Setting.vue';
+import { registerAntdvComponents } from '../components/antdv.register';
 
 const app = createApp(Setting);
-
-// 导入并注册Ant Design Vue组件
-import { registerAntdvComponents } from '../components/antdv.register';
-registerAntdvComponents(app);
 
 // 配置全局属性
 app.config.globalProperties.$message = message;
@@ -47,10 +45,20 @@ const antdLocaleMap = {
 
 // 初始化 i18n 并挂载应用
 const initApp = async () => {
+  // 初始化 Store - 必须在注册组件之前
+  await initStore(app);
+
+  // 注册Ant Design Vue组件
+  registerAntdvComponents(app);
+
   const i18n = createI18nInstance();
+
 
   // 将 i18n 实例传递给 LocaleManager，以便在语言切换时更新全局 locale
   setI18n(i18n);
+
+  // 初始化 Store
+  await initStore(app);
 
   // 配置 Ant Design Vue 国际化
   app.use(ConfigProvider, {

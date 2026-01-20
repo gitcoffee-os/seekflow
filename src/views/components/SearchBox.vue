@@ -16,7 +16,7 @@
 
 <template>
   <!-- 转发到统一的SearchBox组件 -->
-  <SearchBox
+  <GitCoffeeSearchBox
     :settingData="settingData"
     :searching="searching"
     :searchQuery="searchQuery"
@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { SearchBox } from '@gitcoffee/search-ui';
+import { SearchBox as GitCoffeeSearchBox } from '@gitcoffee/search-ui';
 
 import { selectedPlatforms, selectedSearchEngine } from '@gitcoffee/search';
 import { executeSearch, searching, searchQuery } from '@gitcoffee/search';
@@ -39,9 +39,15 @@ import { $t } from '../../locales';
 // 响应式数据
 
 // 处理搜索事件
-const handleSearch = (query: string, engine: string) => {
-  // 执行搜索逻辑，传递选中的搜索引擎
-  executeSearch(query, selectedPlatforms.value, undefined, engine);
+const handleSearch = (query: string, engine: string, apiEnabled?: boolean) => {
+  // 根据智能搜索状态决定传递的参数
+  if (settingData.value.smartSearchEnabled !== false) {
+    // 智能搜索模式：只传递平台参数，不传递搜索引擎参数
+    executeSearch(query, selectedPlatforms.value);
+  } else {
+    // 非智能搜索模式：传递搜索引擎参数，平台参数传空数组
+    executeSearch(query, [], engine);
+  }
 };
 
 // 更新搜索查询

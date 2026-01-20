@@ -35,7 +35,7 @@ export const SEARCH_API_CONFIG = {
 
 // 应用信息配置
 export const APP_INFO = {
-  name: 'Seekbot',
+  name: 'SeekFlow',
   logoUrl: logoUrl,
   version: 'v1.0.0',
   officialWebsite: 'https://seekflow.exmay.com/',

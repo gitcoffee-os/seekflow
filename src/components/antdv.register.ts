@@ -22,6 +22,7 @@ import {
   Checkbox,
   Col,
   Collapse,
+  ConfigProvider,
   Divider,
   Drawer,
   Dropdown,
@@ -49,6 +50,7 @@ import {
 export function registerAntdvComponents(app: App) {
   // 注册Ant Design Vue组件
   app.use(Button);
+  app.use(ConfigProvider);
   app.use(Input);
   app.use(Layout);
   app.use(Card);

@@ -13,7 +13,7 @@
   "list": "List",
   "selectAll": "Select All",
   "selectByTag": "Select by Tag",
-  "copyright": "© 2026 SeekFlow. All rights reserved.",
+  "copyright": "© 2026 {name}. All rights reserved.",
   "lightMode": "Light",
   "darkMode": "Dark",
   "switchToChatBot": "Switch to AI Mode",

@@ -15,7 +15,8 @@
  */
 <template>
   <SearchHome
-    :app-name="'SeekFlow'"
+    :app-name="APP_INFO.name"
+    :official-website="APP_INFO.officialWebsite"
     :logo-url="iconUrl"
     :setting-data="settingData"
     :show-search-box="showSearchBox"
@@ -52,6 +53,8 @@ import { useCurrentLanguage } from '../locales';
 import { Chatbot } from '@gitcoffee/chatbot-ui';
 // 导入logo.svg资源
 import iconUrl from '../../assets/logo.svg';
+// 导入应用配置
+import { APP_INFO } from '../config/config';
 
 import SearchBox from './components/SearchBox.vue';
 import UserSetting from './components/UserSetting.vue';

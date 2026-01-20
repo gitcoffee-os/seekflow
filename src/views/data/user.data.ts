@@ -18,27 +18,25 @@ import { onActivated, onMounted, onUnmounted } from 'vue';
 import { $t } from '../../locales';
 import { useSettingsStore } from '../../stores';
 
-// 获取设置 store
-const settingsStore = useSettingsStore();
-
 // 导出用户信息（从 store 获取）
-export const userInfo = () => settingsStore.userInfo;
+export const userInfo = () => useSettingsStore().userInfo;
 
 // 导出用户是否登录（从 store 获取）
-export const isLoggedIn = () => settingsStore.getIsLoggedIn;
+export const isLoggedIn = () => useSettingsStore().getIsLoggedIn;
 
 // 导出加载用户信息函数（使用 store）
 export const loadUserInfo = async () => {
-  return await settingsStore.loadUserInfo();
+  return await useSettingsStore().loadUserInfo();
 };
 
 // 导出登录函数（使用 store）
 export const login = () => {
-  settingsStore.login();
+  useSettingsStore().login();
 };
 
 // 导出登录检查函数（使用 store）
 export const checkLogin = () => {
+  const settingsStore = useSettingsStore();
   if (!settingsStore.getIsLoggedIn) {
     Modal.confirm({
       title: $t('common.login.prompt'),
@@ -58,7 +56,7 @@ export const checkLogin = () => {
 // 导出登出函数（使用 store）
 export const logout = async () => {
   try {
-    await settingsStore.logout();
+    await useSettingsStore().logout();
     message.success($t('common.logout.success'));
   } catch (error) {
     console.error('Failed to logout:', error);
@@ -69,7 +67,7 @@ export const logout = async () => {
 // 页面可见性变化时重新加载用户信息
 export const handleVisibilityChange = () => {
   if (document.visibilityState === 'visible') {
-    settingsStore.loadUserInfo();
+    useSettingsStore().loadUserInfo();
   }
 };
 
@@ -77,7 +75,7 @@ export const handleVisibilityChange = () => {
 export const setupUserLifecycle = () => {
   onMounted(() => {
     // 初始加载用户信息
-    settingsStore.loadUserInfo();
+    useSettingsStore().loadUserInfo();
 
     // 添加页面可见性监听
     document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -86,7 +84,7 @@ export const setupUserLifecycle = () => {
   // 当组件被激活时（用于keep-alive场景）
   onActivated(() => {
     // 组件激活时重新加载用户信息
-    settingsStore.loadUserInfo();
+    useSettingsStore().loadUserInfo();
   });
 
   onUnmounted(() => {

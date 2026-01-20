@@ -1,8 +1,8 @@
 {
-  "displayName": "SeekFlow 智能搜索助手",
+  "displayName": "SeekFlow 智能探索助手",
   "name": "seekflow",
   "version": "1.0.0",
-  "description": "SeekFlow 智能搜索助手",
+  "description": "SeekFlow 智能探索助手",
   "author": "GitCoffee Team @GitCoffee",
   "scripts": {
     "dev": "vite",
@@ -63,7 +63,25 @@
       "https://*/*",
       "http://127.0.0.1/*",
       "http://localhost/*"
-    ]
+    ],
+    "web_accessible_resources": [
+      {
+        "resources": [
+          "index.html"
+        ],
+        "matches": [
+          "<all_urls>"
+        ]
+      }
+    ],
+    "options_page": "options.html",
+    "options_ui": {
+      "page": "options.html",
+      "open_in_tab": false
+    },
+    "side_panel": {
+      "default_path": "sidepanel.html"
+    }
   },
   "keywords": [
     "search",

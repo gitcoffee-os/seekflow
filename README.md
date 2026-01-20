@@ -279,7 +279,7 @@ module.exports = {
 ## 👥 加入社区
 SeekFlow 智能探索助手 微信 交流群：
 
-<img src="https://seekflow.exmay.com/docshttps://seekflow.exmay.com/docs/images/gitcoffee_wechat.jpg" width="230px" title="SeekFlow 智能探索助手 微信群" />
+<img src="https://seekflow.exmay.com/docs/images/gitcoffee_wechat.jpg" width="230px" title="SeekFlow 智能探索助手 微信群" />
 
 (扫码添加微信，备注：SeekFlow，邀您加入群聊)
 

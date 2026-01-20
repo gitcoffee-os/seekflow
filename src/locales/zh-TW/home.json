@@ -13,7 +13,7 @@
   "list": "列表",
   "selectAll": "全選",
   "selectByTag": "按標籤選擇",
-  "copyright": "© 2026 SeekFlow. All rights reserved.",
+  "copyright": "© 2026 {name}. All rights reserved.",
   "lightMode": "淺色",
   "darkMode": "深色",
   "switchToChatBot": "切換到AI模式",
