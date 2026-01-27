@@ -13,81 +13,78 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ref, App } from 'vue';
-// 导入核心i18n包的功能
-import { 
-  localeManager, 
-  useTranslate, 
-  registerProjectMessages, 
-  registerLanguageChangeCallback,
-  t as coreT,
-  useCurrentLanguage as useCoreCurrentLanguage
-} from '@gitcoffee/i18n';
 
+// 导入核心i18n包的功能
+import {
+  t as coreT,
+  localeManager,
+  registerLanguageChangeCallback,
+  registerProjectMessages,
+  getCurrentLanguage
+} from '@gitcoffee/i18n';
+import { App, ref } from 'vue';
 // 导入seekflow项目特定的语言资源
-import enAiChat from './en/aiChat.json';
-import enChatbot from './en/chatbot.json';
 import enCommon from './en/common.json';
 import enHome from './en/home.json';
 import enSearch from './en/search.json';
 import enSearchResults from './en/searchResults.json';
 import enSetting from './en/setting.json';
-
-import zhTwAiChat from './zh-TW/aiChat.json';
-import zhTwChatbot from './zh-TW/chatbot.json';
+import enAiChat from './en/aiChat.json';
+import enChatbot from './en/chatbot.json';
 import zhTwCommon from './zh-TW/common.json';
 import zhTwHome from './zh-TW/home.json';
 import zhTwSearch from './zh-TW/search.json';
 import zhTwSearchResults from './zh-TW/searchResults.json';
 import zhTwSetting from './zh-TW/setting.json';
-
-import zhAiChat from './zh/aiChat.json';
-import zhChatbot from './zh/chatbot.json';
+import zhTwAiChat from './zh-TW/aiChat.json';
+import zhTwChatbot from './zh-TW/chatbot.json';
 import zhCommon from './zh/common.json';
 import zhHome from './zh/home.json';
 import zhSearch from './zh/search.json';
 import zhSearchResults from './zh/searchResults.json';
 import zhSetting from './zh/setting.json';
+import zhAiChat from './zh/aiChat.json';
+import zhChatbot from './zh/chatbot.json';
 
 // 注册seekflow项目特定的语言消息到核心i18n
 // 英文消息
 registerProjectMessages('seekflow', 'en', {
-  aiChat: enAiChat,
-  chatbot: enChatbot,
-  common: enCommon,
   home: enHome,
+  common: enCommon,
   search: enSearch,
   searchResults: enSearchResults,
-  setting: enSetting
+  setting: enSetting,
+  aiChat: enAiChat,
+  chatbot: enChatbot
 });
 
 // 中文简体消息
 registerProjectMessages('seekflow', 'zh', {
-  aiChat: zhAiChat,
-  chatbot: zhChatbot,
-  common: zhCommon,
   home: zhHome,
+  common: zhCommon,
   search: zhSearch,
   searchResults: zhSearchResults,
-  setting: zhSetting
+  setting: zhSetting,
+  aiChat: zhAiChat,
+  chatbot: zhChatbot
 });
 
 // 中文繁体消息
 registerProjectMessages('seekflow', 'zh-TW', {
-  aiChat: zhTwAiChat,
-  chatbot: zhTwChatbot,
-  common: zhTwCommon,
   home: zhTwHome,
+  common: zhTwCommon,
   search: zhTwSearch,
   searchResults: zhTwSearchResults,
-  setting: zhTwSetting
+  setting: zhTwSetting,
+  aiChat: zhTwAiChat,
+  chatbot: zhTwChatbot
 });
 
 /**
  * 创建应用本地的当前语言响应式引用
  * 这样可以确保应用内的响应式系统能够正确追踪语言变化
  */
-export const currentLanguage = ref(useCoreCurrentLanguage().value);
+export const currentLanguage = ref(getCurrentLanguage());
 
 /**
  * 注册语言变化回调，当核心包的语言变化时，更新本地响应式引用
@@ -104,12 +101,12 @@ registerLanguageChangeCallback((lang) => {
  */
 export const i18nPlugin = {
   install(app: App) {
-    // 全局注入$t函数
-    app.config.globalProperties.$t = coreT;
-    
+    // 全局注入$t函数，使用类型断言解决类型不匹配问题
+    (app.config.globalProperties as any).$t = coreT;
+
     // 提供全局注入，支持Composition API
     app.provide('$t', coreT);
-  }
+  },
 };
 
 /**
@@ -119,22 +116,15 @@ export const i18nPlugin = {
 export const useTranslation = () => {
   // 使用本地的currentLanguage引用，确保响应式
   const currentLanguageRef = currentLanguage;
-  
+
   // 返回一个响应式翻译函数
-  const translate = (key: string, params?: Record<string, any>): string => {
+  const translate = (key: string, params?: any): string => {
     // 访问currentLanguageRef.value建立响应式依赖
-    const i18n = localeManager.getI18n();
-    const lang = currentLanguageRef.value;
-    
-    // 如果没有i18n实例，返回key
-    if (!i18n) {
-      return key;
-    }
-    
-    // 使用i18n实例进行翻译
-    return i18n.global.t(key, params);
+    currentLanguageRef.value;
+    // 直接使用核心翻译函数
+    return coreT(key, params);
   };
-  
+
   return translate;
 };
 

@@ -15,6 +15,11 @@
  */
 // 内容脚本 - 在网页中运行的脚本
 
+// 导入store初始化函数
+import { initStore } from '@gitcoffee/store';
+// 导入设置store
+import { useSettingsStore } from '../stores/settings';
+
 // 监听来自 popup 的消息
 chrome.runtime.onMessage.addListener(
   (request: any, _sender: any, sendResponse: any) => {
@@ -161,7 +166,28 @@ function injectSearchInterface(query: string) {
   }, 3000);
 }
 
+// 初始化内容脚本
+const initializeContentScript = async () => {
+  console.log('SeekFlow 内容脚本初始化开始');
+
+  // 初始化 store
+  console.log('初始化 Store...');
+  await initStore();
+  console.log('Store 初始化完成');
+
+  // 初始化设置
+  console.log('初始化设置...');
+  const settingsStore = useSettingsStore();
+  await settingsStore.initialize();
+  console.log('设置初始化完成');
+
+  console.log('SeekFlow 内容脚本初始化完成');
+};
+
 // 如果需要在页面加载时执行某些操作
-document.addEventListener('DOMContentLoaded', () => {
-  // 可以在这里添加一些初始化逻辑
+document.addEventListener('DOMContentLoaded', async () => {
+  // 初始化内容脚本
+  await initializeContentScript();
+  
+  // 可以在这里添加一些其他初始化逻辑
 });

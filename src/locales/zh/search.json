@@ -1,5 +1,6 @@
 {
   "pleaseSelectAtLeastOnePlatform": "请至少选择一个平台",
+  "pleaseEnterKeyword": "请输入搜索关键词",
   "searching": "正在 {count} 个平台上搜索 '{query}'...",
   "openedInNewTab": "已在 {count} 个新标签页中打开搜索结果",
   "searchFailed": "搜索失败"

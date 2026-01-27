@@ -24,13 +24,13 @@ import { initializeTabListeners } from './tabManager';
  * 初始化所有SeekFlow模块
  * 这个函数将集中调用各个模块的初始化函数
  */
-export const initializeAllModules = () => {
+export const initializeAllModules = async () => {
   console.log('SeekFlow 模块初始化开始');
 
   // 按顺序初始化各个模块
   initializeExtensionEvents(); // 初始化扩展事件
   initializeTabListeners(); // 初始化标签页事件
-  initializeMessageListener(); // 初始化消息监听
+  await initializeMessageListener(); // 初始化消息监听
 
   console.log('SeekFlow 模块初始化完成');
 };

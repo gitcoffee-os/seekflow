@@ -17,6 +17,7 @@
 import { defineStore } from '@gitcoffee/store';
 import { getItem, setItem, removeItem } from '@gitcoffee/storage';
 import { search } from '@gitcoffee/api';
+import { createTab } from '@gitcoffee/browser';
 
 export interface UserInfo {
   nickname: string;
@@ -40,7 +41,7 @@ export const useSettingsStore = defineStore('settings', {
     // 应用设置
     appSettings: {
       language: 'zh',
-      theme: 'red',
+      theme: 'light',
       trustedDomains: [],
       smartSearch: true,
     } as AppSettings,
@@ -109,15 +110,15 @@ export const useSettingsStore = defineStore('settings', {
     },
     
     // 登录
-    login() {
-      // Use chrome.tabs.create in extension context, fall back to window.open if available
-      if (typeof chrome !== 'undefined' && chrome.tabs) {
-        chrome.tabs.create({
-          url: 'https://seekflow.exmay.com/exmay/seekflow/center/home',
-          active: true
-        });
-      } else if (typeof window !== 'undefined' && window.open) {
-        window.open('https://seekflow.exmay.com/exmay/seekflow/center/home', '_blank');
+    async login() {
+      try {
+        // 使用统一的 createTab 函数创建标签页
+        await createTab('https://seekflow.exmay.com/exmay/seekflow/center/home', { active: true });
+      } catch (error) {
+        // 降级处理：如果 createTab 失败，使用 window.open
+        if (typeof window !== 'undefined' && window.open) {
+          window.open('https://seekflow.exmay.com/exmay/seekflow/center/home', '_blank');
+        }
       }
     },
     
@@ -146,11 +147,37 @@ export const useSettingsStore = defineStore('settings', {
         // 从本地存储加载应用设置
         const savedSettings = await getItem('appSettings');
         if (savedSettings) {
-          this.appSettings = { ...this.appSettings, ...JSON.parse(savedSettings) };
+          // 检查savedSettings的类型
+          if (typeof savedSettings === 'string') {
+            try {
+              this.appSettings = { ...this.appSettings, ...JSON.parse(savedSettings) };
+            } catch (parseError) {
+              console.error('Failed to parse app settings:', parseError);
+              // 解析失败时，重置为默认设置
+              this.appSettings = {
+                language: 'zh',
+                theme: 'light',
+                trustedDomains: [],
+                smartSearch: true,
+              };
+              // 保存默认设置
+              await this.saveAppSettings(this.appSettings);
+            }
+          } else if (typeof savedSettings === 'object') {
+            // 如果直接返回了对象，直接使用
+            this.appSettings = { ...this.appSettings, ...savedSettings };
+          }
         }
       } catch (error) {
-        console.error('Failed to load app settings:', error);
-      }
+      console.error('Failed to load app settings:', error);
+      // 加载失败时，重置为默认设置
+      this.appSettings = {
+        language: 'zh',
+        theme: 'light',
+        trustedDomains: [],
+        smartSearch: true,
+      };
+    }
     },
     
     // 保存应用设置
@@ -173,6 +200,18 @@ export const useSettingsStore = defineStore('settings', {
     // 切换主题
     async changeTheme(theme: string) {
       await this.saveAppSettings({ theme });
+      // 同时更新 settingData 中的主题设置，确保两处数据同步
+      try {
+        const { settingData, useTheme } = await import('@gitcoffee/app');
+        if (settingData.value) {
+          settingData.value.theme = theme;
+        }
+        // 应用主题
+        const { setTheme } = useTheme();
+        setTheme();
+      } catch (error) {
+        console.error('Error applying theme:', error);
+      }
     },
   },
 });

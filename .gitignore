@@ -29,6 +29,8 @@ yarn.lock
 out/
 build/
 dist/
+.output/
+.wxt/
 *.zip
 *.crx
 

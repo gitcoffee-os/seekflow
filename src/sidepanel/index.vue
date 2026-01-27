@@ -7,110 +7,78 @@ distributed on an "AS IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 either express or implied. * See the License for the specific language governing
 permissions and * limitations under the License. */
 <template>
-  <SearchSetting :app-info="APP_INFO" />
+  <div class="app-container">
+    <a-config-provider :locale="antdLocale" :theme="themeConfig">
+      <router-view />
+    </a-config-provider>
+  </div>
 </template>
-
-<script setup lang="ts">
-import { SearchSetting } from '@gitcoffee/search-ui';
-import { APP_INFO } from '../config/config';
-
-</script>
 
 <style>
 @import '../styles/global.css';
 </style>
 
-<script lang="ts">
-import { initPluginSystem } from '@gitcoffee/plugins';
-import { initStore } from '@gitcoffee/store';
-import {
-  Avatar,
-  Button,
-  Card,
-  Checkbox,
-  Col,
-  Collapse,
-  ConfigProvider,
-  Drawer,
-  Dropdown,
-  Empty,
-  Input,
-  Layout,
-  Menu,
-  message,
-  Modal,
-  Radio,
-  Row,
-  Select,
-  Slider,
-  Space,
-  Spin,
-  Switch,
-  Tabs,
-  Tag,
-} from '@gitcoffee/design-ui';
-import { enUS, zhCN } from '@gitcoffee/design-ui';
-import { App } from 'vue';
-import { createI18nInstance, setI18n } from '@gitcoffee/i18n';
+<script setup lang="ts">
+// 导入通用模块
+import { useAntdLocale, useAppInitialization, useTheme } from '@gitcoffee/app';
+import { onMounted } from 'vue';
+// 导入应用默认设置
+import { APP_SETTING } from '../config/config';
+// 导入登录检查相关
+import { useSettingsStore } from '../stores';
 
-// 组件库国际化映射
-const antdLocaleMap = {
-  en: enUS,
-  zh: zhCN,
-};
+// 初始化设置 store
+const settingsStore = useSettingsStore();
+
+// 使用通用主题管理模块
+const { themeConfig, setTheme, setupThemeListener } = useTheme();
+
+// 使用通用国际化配置模块
+const { antdLocale } = useAntdLocale();
+
+// 使用通用应用初始化模块
+const { isInitialized } = useAppInitialization({
+  smartSearchDefault: APP_SETTING.smartSearch,
+  aiModeSearchDefault: APP_SETTING.aiModeSearch,
+  settingsStore,
+  onInitialized: () => {
+    // 加载完成后重新设置主题，确保主题设置生效
+    setTheme();
+  },
+});
+
+// 初始化配置
+onMounted(() => {
+  setTheme();
+  setupThemeListener();
+});
+</script>
+
+<script lang="ts">
+import { initApp } from '@gitcoffee/app';
+import { App } from 'vue';
+import AppComponent from '../App.vue';
+import router from '../router';
+import { registerAntdvComponents } from '../components/antdv.register';
+import { APP_ID, BASE_URL } from '../config/config';
+import { useSettingsStore } from '../stores';
 
 // Use regular script block to export Plasmo-specific functions
 export default {
   // Plasmo will call this function to configure the app instance
   async prepare(app: App) {
-    // 初始化 Store
-    await initStore(app);
-
-    // 注册 Ant Design Vue 组件
-    app.use(Button);
-    app.use(Input);
-    app.use(Layout);
-    app.use(Card);
-    app.use(Tag);
-    app.use(Spin);
-    app.use(Empty);
-    app.use(Checkbox);
-    app.use(Radio);
-    app.use(Slider);
-    app.use(Space);
-    app.use(Modal);
-    app.use(Drawer);
-    app.use(Row);
-    app.use(Col);
-    app.use(Tabs);
-    app.use(Switch);
-    app.use(Collapse);
-    app.use(Avatar);
-    app.use(Select);
-    app.use(Dropdown);
-    app.use(Menu);
-
-    // 配置全局属性
-    app.config.globalProperties.$message = message;
-
-    // 初始化 i18n
-    const i18n = createI18nInstance();
-
-    // 将 i18n 实例传递给 LocaleManager，以便在语言切换时更新全局 locale
-    setI18n(i18n);
-
-    // 配置 Ant Design Vue 国际化
-    app.use(ConfigProvider, {
-      locale:
-        antdLocaleMap[i18n.global.locale.value as keyof typeof antdLocaleMap] ||
-        zhCN,
-      // 不在这里设置主题算法，让组件级配置生效
+    // 使用与主应用相同的初始化逻辑
+    await initApp({
+      App: AppComponent,
+      router,
+      registerComponents: (app) => {
+        registerAntdvComponents(app);
+      },
+      BASE_URL,
+      APP_ID,
+      useSettingsStore,
+      app, // 使用 Plasmo 提供的应用实例
     });
-
-    app.use(i18n);
-
-    // 初始化插件系统
-    await initPluginSystem();
   },
 };
 </script>

@@ -120,41 +120,84 @@ cd seekflow
 # 安装依赖
 pnpm i
 
-# 启动开发服务器（推荐）
+# 启动开发服务器（Vite 方式）
+pnpm dev
+
+# 启动开发服务器（推荐 - WXT 方式）
+pnpm wxt:dev
+
+# 启动开发服务器（Plasmo 方式，可选）
 pnpm plasmo:dev
 ```
 
 ### 浏览器扩展安装
 
+#### WXT 方式（推荐）
+1. 运行 `pnpm wxt:build` 构建扩展包
+2. 打开浏览器扩展管理页面
+3. 开启「开发者模式」
+4. 点击「加载已解压的扩展程序」
+5. 选择生成的 `.output/` 目录
+
+#### WXT 方式（生成 ZIP 包）
+1. 运行 `pnpm wxt:zip` 构建并生成 ZIP 格式的扩展包
+2. 打开浏览器扩展管理页面
+3. 开启「开发者模式」
+4. 点击「加载已解压的扩展程序」
+5. 选择生成的 `.output/` 目录或使用生成的 ZIP 文件
+
+#### Plasmo 方式（可选）
 1. 运行 `pnpm plasmo:build` 构建扩展包
 2. 打开浏览器扩展管理页面
 3. 开启「开发者模式」
 4. 点击「加载已解压的扩展程序」
 5. 选择生成的 `build/` 目录
 
+#### Plasmo 方式（生成 ZIP 包，可选）
+1. 运行 `pnpm plasmo:build -- --zip` 构建并生成 ZIP 格式的扩展包
+2. 打开浏览器扩展管理页面
+3. 开启「开发者模式」
+4. 点击「加载已解压的扩展程序」
+5. 选择生成的 `build/` 目录或使用生成的 ZIP 文件
+
 ## 🚀 开发与构建
 
 ### 开发模式
 
 ```bash
-# 仅运行 Vite 开发服务器
-pnpm dev # 支持实时重载与 HMR 热更新
+# Vite 开发模式
+pnpm dev # 仅运行 Vite 开发服务器
 
-# Vite + Plasmo 开发模式（推荐）
+# WXT 开发模式（推荐）
+pnpm wxt:dev # 支持实时重载与 HMR 热更新
+
+# Plasmo 开发模式（可选）
 pnpm plasmo:dev
 ```
 
 ### 构建生产版本
 
+#### WXT 方式（推荐）
+
+```bash
+# 构建生产版本的扩展包
+pnpm wxt:build
+
+# 生成发布包（ZIP 格式）
+pnpm wxt:zip
+```
+
+构建完成后，扩展包将生成在 `.output/` 目录中。
+
+#### Plasmo 方式（可选）
+
 ```bash
 # 构建生产版本的扩展包
 pnpm plasmo:build
-```
 
-  ```bash
 # 生成发布包（ZIP 格式）
 pnpm plasmo:build -- --zip
-  ```  
+```
 
 构建完成后，扩展包将生成在 `build/` 目录中。
 
@@ -172,22 +215,38 @@ pnpm format:check
 
 ```
 ├── assets/             # 静态资源文件
-├── plugins/            # 内置插件集合
 ├── scripts/            # 辅助脚本
 ├── src/                # 源代码目录
+│   ├── api/            # API 相关代码
+│   ├── assets/         # 源代码静态资源
 │   ├── background/     # 后台脚本
+│   │   └── modules/    # 后台脚本模块
+│   ├── components/     # 通用组件
+│   ├── config/         # 配置文件
 │   ├── content/        # 内容脚本
+│   ├── entrypoints/    # WXT 入口点（推荐）
 │   ├── locales/        # 国际化资源
+│   │   ├── en/         # 英文
+│   │   ├── zh/         # 中文简体
+│   │   └── zh-TW/      # 中文繁体
 │   ├── options/        # 选项页面
-│   ├── plugins/        # 插件系统核心
 │   ├── router/         # 路由配置
-│   ├── search/         # 搜索相关配置
 │   ├── sidepanel/      # 侧边栏组件
+│   ├── stores/         # 状态管理
 │   ├── styles/         # 全局样式
 │   ├── views/          # Vue 页面视图
+│   │   ├── components/ # 页面组件
+│   │   ├── data/       # 数据文件
+│   │   └── modules/    # 页面模块
 │   ├── App.vue         # Vue 主应用
 │   └── main.tsx        # 应用入口
-└── package.json        # 项目配置
+├── index.html          # 主 HTML 模板
+├── package.json        # 项目配置
+├── plasmo.json         # Plasmo 配置文件（可选）
+├── tsconfig.json       # TypeScript 配置
+├── tsconfig.node.json  # Node.js TypeScript 配置
+├── vite.config.ts      # Vite 配置
+└── wxt.config.ts       # WXT 配置文件（推荐）
 ```
 
 ## 🧩 插件系统
@@ -247,7 +306,8 @@ module.exports = {
 | 框架 | Vue | 3.x |
 | 语言 | TypeScript | 5.x |
 | 构建工具 | Vite | 6.x |
-| 扩展框架 | Plasmo | 0.90.x |
+| 扩展框架 | WXT（推荐） | 0.20.x |
+| 扩展框架 | Plasmo（可选） | 0.90.x |
 | UI 组件库 | Ant Design Vue | 4.x |
 | 代码格式化 | Prettier | 3.x |
 

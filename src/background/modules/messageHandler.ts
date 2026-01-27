@@ -29,32 +29,24 @@ import {
 import { processedQueries } from './state';
 // 导入工具函数
 import { generateQueryKey } from './utils';
-
-// Chrome API 类型声明
-declare const chrome: any;
+// 导入browser模块
+import { storageGet, storageSet, registerMessageHandler, getTabs } from '@gitcoffee/browser';
 
 // 处理获取平台请求
-const handleGetPlatformsRequest = (
-  request: any,
-  sendResponse: (response: any) => void
-) => {
+const handleGetPlatformsRequest = async (message: any) => {
   // 获取指定分类的平台
-  const requestedCategories = request.categories || [];
+  const requestedCategories = message.categories || [];
   const result = requestedCategories.flatMap((category: string) =>
     getPlatformsByCategory(category)
   );
 
-  sendResponse({ platforms: result });
-  return true;
+  return { platforms: result };
 };
 
 // 处理AI搜索重试请求
-const handleRetrySearchRequest = (
-  request: any,
-  sendResponse: (response: any) => void
-) => {
+const handleRetrySearchRequest = async (message: any) => {
   // 处理AI搜索请求重试
-  const { tabId, query, chatConfig, platformName } = request;
+  const { tabId, query, chatConfig, platformName } = message;
 
   // 检查是否已经处理过该查询
   const tabQueries = processedQueries.get(tabId) || new Set();
@@ -66,8 +58,7 @@ const handleRetrySearchRequest = (
     console.warn(
       `标签页 ${tabId} 的 ${platformName} 搜索请求已经处理过，不再重试`
     );
-    sendResponse({ success: false, message: '查询已经处理过，不允许重试' });
-    return true;
+    return { success: false, message: '查询已经处理过，不允许重试' };
   }
 
   // 只有在查询尚未处理时才添加到待处理列表
@@ -77,39 +68,31 @@ const handleRetrySearchRequest = (
   );
 
   // 将请求添加到待处理列表
-  chrome.storage.local.get(['pendingAiSearchRequests'], (result: any) => {
-    const existingRequests = result.pendingAiSearchRequests || [];
-    // 检查是否已经存在该标签页的请求
-    const existingRequest = existingRequests.find(
-      (req: any) => req.tabId === tabId
+  const existingRequests = await storageGet('pendingAiSearchRequests') || [];
+  // 检查是否已经存在该标签页的请求
+  const existingRequest = existingRequests.find(
+    (req: any) => req.tabId === tabId
+  );
+  if (!existingRequest) {
+    existingRequests.push({
+      tabId,
+      query,
+      chatConfig,
+      platformName,
+    });
+    await storageSet('pendingAiSearchRequests', existingRequests);
+    console.log(
+      `已将标签页 ${tabId} 的 ${platformName} 搜索请求添加到待处理列表`
     );
-    if (!existingRequest) {
-      existingRequests.push({
-        tabId,
-        query,
-        chatConfig,
-        platformName,
-      });
-      chrome.storage.local.set({
-        pendingAiSearchRequests: existingRequests,
-      });
-      console.log(
-        `已将标签页 ${tabId} 的 ${platformName} 搜索请求添加到待处理列表`
-      );
-    }
-  });
+  }
 
-  sendResponse({ success: true });
-  return true;
+  return { success: true };
 };
 
 // 处理AI搜索完成请求
-const handleSearchCompletedRequest = (
-  request: any,
-  sendResponse: (response: any) => void
-) => {
+const handleSearchCompletedRequest = async (message: any) => {
   // 处理AI搜索请求完成事件
-  const { tabId, query, platformName } = request;
+  const { tabId, query, platformName } = message;
   console.log(
     `收到AI搜索请求完成通知: 标签页 ${tabId}, 平台 ${platformName}, 查询 ${query}`
   );
@@ -119,108 +102,66 @@ const handleSearchCompletedRequest = (
   const tabQueryKey = `${platformName}:${query.trim().toLowerCase()}`;
 
   // 从待处理列表中移除该请求
-  chrome.storage.local.get(['pendingAiSearchRequests'], (result: any) => {
-    if (result.pendingAiSearchRequests) {
-      const updatedRequests = result.pendingAiSearchRequests.filter(
-        (req: any) =>
-          !(
-            req.tabId === tabId &&
-            req.platformName === platformName &&
-            req.query === query
-          )
-      );
-      chrome.storage.local.set({
-        pendingAiSearchRequests: updatedRequests,
-      });
-      console.log(
-        `从待处理列表中移除标签页 ${tabId} 的 ${platformName} 搜索请求`
-      );
-    }
-  });
+  const existingRequests = await storageGet('pendingAiSearchRequests') || [];
+  if (existingRequests) {
+    const updatedRequests = existingRequests.filter(
+      (req: any) =>
+        !(
+          req.tabId === tabId &&
+          req.platformName === platformName &&
+          req.query === query
+        )
+    );
+    await storageSet('pendingAiSearchRequests', updatedRequests);
+    console.log(
+      `从待处理列表中移除标签页 ${tabId} 的 ${platformName} 搜索请求`
+    );
+  }
 
   // 将查询标记为已处理
   const tabQueries = processedQueries.get(tabId) || new Set();
   tabQueries.add(tabQueryKey);
   processedQueries.set(tabId, tabQueries);
 
-  sendResponse({ success: true });
-  return true;
+  return { success: true };
 };
 
 // 处理获取标签页请求
-const handleGetTabsRequest = (sendResponse: (response: any) => void) => {
+const handleGetTabsRequest = async () => {
   // 获取当前窗口的所有标签页
-  chrome.tabs.query({ currentWindow: true }, (tabs: any[]) => {
-    sendResponse({ tabs: tabs });
-  });
-  return true;
+  const tabs = await getTabs();
+  return { tabs: tabs };
 };
 
 // 处理分组搜索请求
-const handleGroupingSearchRequest = (
-  request: any,
-  sendResponse: (response: any) => void
-) => {
-  handleSearchWithGroupingRequest(request)
-    .then(() => {
-      sendResponse({ success: true });
-    })
-    .catch((error) => {
-      console.error('Grouped search failed:', error);
-      sendResponse({ success: false, error: '分组搜索失败' });
-    });
-
-  return true;
+const handleGroupingSearchRequest = async (message: any) => {
+  try {
+    await handleSearchWithGroupingRequest(message);
+    return { success: true };
+  } catch (error) {
+    console.error('Grouped search failed:', error);
+    return { success: false, error: '分组搜索失败' };
+  }
 };
 
 // 处理标签页搜索请求
-const handleTabsSearchRequest = (
-  request: any,
-  sendResponse: (response: any) => void
-) => {
-  // 处理标签页搜索请求
-  handleTabSearchRequest(request)
-    .then(() => {
-      sendResponse({ success: true });
-    })
-    .catch((error) => {
-      console.error('Tab search failed:', error);
-      sendResponse({ success: false, error: '标签页搜索失败' });
-    });
-
-  return true;
+const handleTabsSearchRequest = async (message: any) => {
+  try {
+    await handleTabSearchRequest(message);
+    return { success: true };
+  } catch (error) {
+    console.error('Tab search failed:', error);
+    return { success: false, error: '标签页搜索失败' };
+  }
 };
 
 // 初始化消息监听器
-export const initializeMessageListener = () => {
-  // 监听消息
-  chrome.runtime.onMessage.addListener(
-    (request: any, _sender: any, sendResponse: (response: any) => void) => {
-      if (request.action === 'getPlatforms') {
-        return handleGetPlatformsRequest(request, sendResponse);
-      }
-
-      if (request.action === 'retryAiSearchRequest') {
-        return handleRetrySearchRequest(request, sendResponse);
-      }
-
-      if (request.action === 'aiSearchRequestCompleted') {
-        return handleSearchCompletedRequest(request, sendResponse);
-      }
-
-      if (request.action === 'getTabs') {
-        return handleGetTabsRequest(sendResponse);
-      }
-
-      if (request.action === 'searchWithGrouping') {
-        return handleGroupingSearchRequest(request, sendResponse);
-      }
-
-      if (request.action === 'searchTabs') {
-        return handleTabsSearchRequest(request, sendResponse);
-      }
-
-      return true;
-    }
-  );
+export const initializeMessageListener = async () => {
+  // 注册消息处理器
+  await registerMessageHandler('getPlatforms', handleGetPlatformsRequest);
+  await registerMessageHandler('retryAiSearchRequest', handleRetrySearchRequest);
+  await registerMessageHandler('aiSearchRequestCompleted', handleSearchCompletedRequest);
+  await registerMessageHandler('getTabs', handleGetTabsRequest);
+  await registerMessageHandler('searchWithGrouping', handleGroupingSearchRequest);
+  await registerMessageHandler('searchTabs', handleTabsSearchRequest);
 };

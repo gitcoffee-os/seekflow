@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 <template>
+  <!-- Test hot reload functionality fixed -->
   <SearchHome
     :app-name="APP_INFO.name"
     :official-website="APP_INFO.officialWebsite"
     :logo-url="iconUrl"
     :setting-data="settingData"
     :show-search-box="showSearchBox"
-    :show-chat-bot-toggle="settingData.smartSearchEnabled && settingData.aiModeSearch"
+    :show-chat-bot-toggle="(settingData.smartSearchEnabled !== false) && (settingData.aiModeSearch !== false)"
     @language-change="handleLanguageChange"
     @open-setting="showSettingModal = true"
     @toggle-theme="toggleTheme"
@@ -46,11 +47,12 @@
 // 导入插件管理器用于本地化
 import { pluginManager } from '@gitcoffee/plugins';
 import { SmartSearch, SearchHome } from '@gitcoffee/search-ui';
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { setLanguage } from '@gitcoffee/i18n';
 import { useCurrentLanguage } from '../locales';
 import { Chatbot } from '@gitcoffee/chatbot-ui';
+import { isBrowserExtension } from '@gitcoffee/store';
 // 导入logo.svg资源
 import iconUrl from '../../assets/logo.svg';
 // 导入应用配置
@@ -65,12 +67,19 @@ import {
   settingData,
 } from '@gitcoffee/app';
 
-import { useI18n } from '@gitcoffee/i18n';
+// 导入主题管理
+import { useTheme } from '@gitcoffee/app';
+
+// 导入设置 store
+import { useSettingsStore } from '../stores';
+
+import { t as $t } from '@gitcoffee/i18n';
+
+// 初始化主题管理
+const { setTheme } = useTheme();
 
 // 响应式数据
 const router = useRouter();
-// 获取i18n实例和$t函数
-const { t: $t } = useI18n();
 
 const showSettingModal = ref(false); // 设置弹窗显示状态
 // 创建Chatbot组件引用
@@ -86,10 +95,35 @@ const toggleSearchMode = () => {
 
 // 主题切换功能 - 与settingData同步
 const toggleTheme = () => {
-  settingData.value.theme = settingData.value.theme === 'dark' ? 'light' : 'dark';
+  console.log('toggleTheme called');
+  console.log('Current theme:', settingData.value.theme);
+  console.log('enableThemeSetting:', settingData.value.enableThemeSetting);
+  // 切换主题
+  const newTheme = settingData.value.theme === 'dark' ? 'light' : 'dark';
+  console.log('New theme:', newTheme);
+  // 替换整个settingData.value对象，确保Vue能检测到变化
+  settingData.value = {
+    ...settingData.value,
+    theme: newTheme
+  };
+  console.log('Updated settingData.theme:', settingData.value.theme);
   // 保存设置到存储
+  console.log('Saving settings to storage...');
   saveSettingsToStorage();
+  console.log('Settings saved');
+  // 更新HTML文档的class，应用新主题
+  console.log('Calling setTheme...');
+  setTheme();
+  console.log('setTheme completed');
 };
+
+// 组件挂载时打印设置信息
+onMounted(() => {
+  console.log('Home component mounted');
+  console.log('Initial settingData:', settingData.value);
+  console.log('Initial theme:', settingData.value.theme);
+  console.log('enableThemeSetting:', settingData.value.enableThemeSetting);
+});
 
 // 处理语言切换
 const handleLanguageChange = (langCode: string) => {

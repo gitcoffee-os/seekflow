@@ -97,7 +97,7 @@ html.dark {
 /* 语言切换菜单全局样式 - 确保覆盖Ant Design默认样式 */
 .language-dropdown .ant-dropdown-menu,
 .language-dropdown .ant-dropdown-content {
-  background-color: rgba(255, 255, 255, 0.95) !important;
+  /*background-color: rgba(255, 255, 255, 0.95) !important;*/
   backdrop-filter: blur(10px) !important;
   border-radius: 8px !important;
   border: 1px solid rgba(0, 0, 0, 0.1) !important;
