@@ -2,7 +2,7 @@
   "welcomeMessage": "Hello! I'm {botName}, how can I help you?",
   "placeholder": "Please enter your question...",
   "deepThink": "❓ Deep Thinking",
-  "webSearch": "🌐 Web Search",
+  "webSearch": "🌐 Smart Search",
   "voiceInput": "Voice input feature is under development",
   "fileUpload": "File upload feature is under development",
   "imageUpload": "Image upload feature is under development",
