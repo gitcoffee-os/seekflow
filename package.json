@@ -1,7 +1,7 @@
 {
   "displayName": "SeekFlow 智能探索助手",
   "name": "seekflow",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "SeekFlow 智能探索助手",
   "author": "GitCoffee Team @GitCoffee",
   "scripts": {
