@@ -32,6 +32,8 @@ import { getCurrentLanguage } from './locales';
 import { useSettingsStore } from './stores';
 import { useTheme, useAppInitialization } from '@gitcoffee/app';
 import { APP_SETTING } from './config/config';
+import { authManager } from '@gitcoffee/auth';
+import { Modal } from '@gitcoffee/design-ui';
 
 // 初始化设置 store
 const settingsStore = useSettingsStore();
@@ -60,6 +62,29 @@ const antdLocale = antdLocaleMap[getCurrentLanguage() as keyof typeof antdLocale
 onMounted(async () => {
   // 初始化 settingsStore
   await settingsStore.initialize();
+  
+  // 配置 AuthManager 的登录确认处理函数
+  authManager.updateConfig({
+    loginConfirmHandler: () => {
+      return new Promise((resolve) => {
+        Modal.confirm({
+          title: '登录提示',
+          content: '请登录后继续操作。是否跳转到登录页面？',
+          onOk() {
+            settingsStore.login();
+            resolve(false);
+          },
+          onCancel() {
+            resolve(false);
+          }
+        });
+      });
+    },
+    loginHandler: () => {
+      settingsStore.login();
+    }
+  });
+  
   setupThemeListener();
   console.log('App mounted');
 });

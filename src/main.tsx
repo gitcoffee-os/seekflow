@@ -21,12 +21,16 @@ import '@gitcoffee/theme-ui/ai.css'; // 使用AI主题样式
 import App from './App.vue';
 // 先导入locales/index.ts，确保翻译资源被注册
 import './locales';
-import { i18nPlugin } from './locales';
+import { i18nPlugin, $t } from './locales';
 // 导入并注册Ant Design Vue组件
 import { registerAntdvComponents } from './components/antdv.register';
 import router from './router';
 // 导入i18n初始化函数
 import { initI18n } from '@gitcoffee/i18n';
+// 导入认证相关
+import { authManager } from '@gitcoffee/auth';
+import { Modal } from '@gitcoffee/design-ui';
+import { useSettingsStore } from './stores';
 
 // 初始化i18n实例
 initI18n().then((i18n) => {

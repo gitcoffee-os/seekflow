@@ -3,7 +3,7 @@
 <div align="center">
   <img src="https://seekflow.exmay.com/docs/images/seekflow_logo.svg" alt="SeekFlow Logo" width="150" height="150" />
   <br />
-  <h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">SeekFlow - 智能探索助手 v1.0.1</h1>
+  <h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">SeekFlow - 智能探索助手 v1.0.2</h1>
   <h3>让搜索更智能、更高效！</h3>
   <p>🎯 多平台智能搜索 • 🧩 灵活插件扩展 • 🌐 全语言支持 • 🤖 AI 智能助手</p>
   <p align="center">

@@ -163,8 +163,14 @@ export default defineConfig(({ mode }) => {
       terserOptions: {
         compress: {
           drop_console: true,
-          drop_debugger: true
-        }
+          drop_debugger: true,
+          // 禁用可能导致 async 关键字被移除的优化
+          unused: false,
+          dead_code: false
+        },
+        // 保持类和方法的结构
+        keep_classnames: true,
+        keep_fnames: true
       },
       // 启用 gzip 压缩
       reportCompressedSize: true,
