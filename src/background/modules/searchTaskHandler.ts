@@ -78,8 +78,8 @@ export const handleTabSearchRequest = async (request: any): Promise<void> => {
 // 重新导出子模块的功能，保持向后兼容性
 export type { SearchTask } from './searchTask';
 export {
-  createSearchTask,
   cleanupSearchTask,
   getSearchTask,
   updateSearchTaskLoadedState,
 } from './searchTask';
+export { createSearchTask } from './taskCreator';

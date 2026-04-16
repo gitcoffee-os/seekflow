@@ -131,7 +131,7 @@ export default defineConfig(({ mode }) => {
                     cwd: resolve(__dirname)
                   })
                   console.log('✅ Plasmo hot reload triggered')
-                } catch (error) {
+                } catch (error: any) {
                   console.error('❌ Failed to trigger plasmo hot reload:', error.message)
                 }
               }
@@ -152,7 +152,7 @@ export default defineConfig(({ mode }) => {
       alias: {
         '~': resolve(__dirname, 'src'),
         '~/*': resolve(__dirname, 'src/*'),
-        'vue-i18n': 'vue-i18n/dist/vue-i18n.runtime.esm-bundler.js',
+        'vue-i18n': 'vue-i18n/dist/vue-i18n.runtime.esm-bundler.js'
       }
     },
     build: {
@@ -186,26 +186,32 @@ export default defineConfig(({ mode }) => {
           background: resolve(__dirname, 'src/background/index.ts'),
           content: resolve(__dirname, 'src/content/index.ts')
         },
+
         output: {
           assetFileNames: 'assets/[name]-[hash][extname]',
           chunkFileNames: 'assets/[name]-[hash].js',
           entryFileNames: (chunkInfo) => {
-            // 为 background 脚本使用 CommonJS 格式
             if (chunkInfo.name === 'background') {
               return 'assets/[name]-[hash].cjs'
             }
             return 'assets/[name]-[hash].js'
           },
-          format: 'es', // 使用ES模块格式
-          inlineDynamicImports: false,
-          // 配置代码分割
-          manualChunks: isFastBuild ? undefined : {
-            // 将第三方依赖打包到单独的 chunk
-            vendor: ['vue', 'vue-router', 'ant-design-vue'],
-            // 将国际化相关代码打包到单独的 chunk
-            i18n: ['vue-i18n'],
-            // 将 UI 组件打包到单独的 chunk
-            ui: ['@gitcoffee/search-ui', '@gitcoffee/chatbot-ui']
+          format: 'es',
+          codeSplitting: true,
+          manualChunks: (id: string) => {
+            if (!id.includes('node_modules')) return
+            const maps: [string, string][] = [
+              ['vue-i18n', 'i18n'],
+              ['@gitcoffee/auth', 'auth'],
+              ['@gitcoffee/search-ui', 'ui'],
+              ['@gitcoffee/chatbot-ui', 'ui'],
+              ['vue', 'vendor'],
+              ['vue-router', 'vendor'],
+              ['ant-design-vue', 'vendor']
+            ]
+            for (const [keyword, chunk] of maps) {
+              if (id.includes(keyword)) return chunk
+            }
           }
         }
       },
